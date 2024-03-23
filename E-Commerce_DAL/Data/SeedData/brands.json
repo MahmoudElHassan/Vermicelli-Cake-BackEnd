@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Angular",
+    "isDelete": false
+  },
+  {
+    "name": "NetCore",
+    "isDelete": false
+  },
+  {
+    "name": "VS Code",
+    "isDelete": false
+  },
+  {
+    "name": "React",
+    "isDelete": false
+  },
+  {
+    "name": "Typescript",
+    "isDelete": false
+  },
+  {
+    "name": "Redis",
+    "isDelete": false
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "Id": 1,
+    "Name": "Boards",
+    "IsDelete": false
+  },
+  {
+    "Id": 2,
+    "Name": "Hats",
+    "IsDelete": false
+  },
+  {
+    "Id": 3,
+    "Name": "Boots",
+    "IsDelete": false
+  },
+  {
+    "Id": 4,
+    "Name": "Gloves",
+    "IsDelete": false
+  }
+]

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.IdentityModel.Tokens;
 
 namespace E;
 
@@ -14,13 +15,23 @@ public static class IdentityServiceExtensions
     {
         var builder = services.AddIdentityCore<AppUser>();
 
+
         builder = new IdentityBuilder(builder.UserType, builder.Services);
+        builder.AddRoles<IdentityRole>();
         builder.AddEntityFrameworkStores<AppIdentityDbContext>();
         builder.AddSignInManager<SignInManager<AppUser>>();
+        builder.AddDefaultTokenProviders();
+
+
+
+
 
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
              .AddJwtBearer(options =>
              {
+                 // options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                 //options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                 //options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                  options.TokenValidationParameters = new TokenValidationParameters
                  {
                      ValidateIssuerSigningKey = true,

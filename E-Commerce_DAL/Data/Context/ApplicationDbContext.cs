@@ -12,8 +12,8 @@ public class ApplicationDbContext : DbContext
 
 
     public DbSet<Product> Products => Set<Product>();
-    public DbSet<ProductType> ProductTypes => Set<ProductType>();
-    public DbSet<ProductBrand> ProductBrands => Set<ProductBrand>();
+    //public DbSet<Flavor> Flavors => Set<Flavor>();
+    public DbSet<Category> Categories => Set<Category>();
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderItem> OrderItems { get; set; }
     public DbSet<DeliveryMethod> DeliveryMethods { get; set; }
@@ -38,24 +38,24 @@ public class ApplicationDbContext : DbContext
     }
 
 
-    public override int SaveChanges()
-    {
-        foreach (var entry in ChangeTracker.Entries())
-        {
-            var entity = entry.Entity;
+    //public override int SaveChanges()
+    //{
+    //    foreach (var entry in ChangeTracker.Entries())
+    //    {
+    //        var entity = entry.Entity;
 
-            if (entry.State == EntityState.Deleted) //&& entity is ISoftDelete
-            {
-                entry.State = EntityState.Modified;
-                entity.GetType().GetProperty("IsDelete")?.SetValue(entity, true);
-            }
-            else
-            {
-                entry.State = EntityState.Modified;
-                entity.GetType().GetProperty("IsDelete")?.SetValue(entity, false);
-            }
+    //        if (entry.State == EntityState.Deleted) //&& entity is ISoftDelete
+    //        {
+    //            entry.State = EntityState.Modified;
+    //            entity.GetType().GetProperty("IsDelete")?.SetValue(entity, true);
+    //        }
+    //        else
+    //        {
+    //            entry.State = EntityState.Modified;
+    //            entity.GetType().GetProperty("IsDelete")?.SetValue(entity, false);
+    //        }
 
-        }
-        return base.SaveChanges();
-    }
+    //    }
+    //    return base.SaveChanges();
+    //}
 }

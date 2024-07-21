@@ -35,7 +35,7 @@ public class ProductsController : BaseApiController
     {
         var dbProduct = await _productManager.GetById(id);
 
-        if (dbProduct is null || dbProduct.IsDelete is true)
+        if (dbProduct is null)
             return NotFound(new ApiResponse(404));
 
         return dbProduct;

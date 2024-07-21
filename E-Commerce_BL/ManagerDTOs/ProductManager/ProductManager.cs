@@ -20,7 +20,7 @@ public class ProductManager : IProductManager
     #endregion
 
     #region Method
-    public async Task<Pagination<ReadProductDTO>> GetAll([FromQuery] ProductSpecParams productParams)
+    public async Task<IReadOnlyList<ReadProductDTO>> GetAll([FromQuery] ProductSpecParams productParams)
     {
         var spec = new ProductsWithTypesAndBrandsSpecification(productParams);
         var countSpec = new ProductsWithFiltersForCountSpecification(productParams);
@@ -28,10 +28,10 @@ public class ProductManager : IProductManager
         var totalItems = await _productRepo.CountAsync(countSpec);
         var products = await _productRepo.ListAsync(spec);
 
-        var data = _mapper.Map<IReadOnlyList<ReadProductDTO>>(products);
+        var result = _mapper.Map<IReadOnlyList<ReadProductDTO>>(products);
 
-        var result = new Pagination<ReadProductDTO>(productParams.PageIndex,
-            productParams.PageSize, totalItems, data);
+        //var result = new Pagination<ReadProductDTO>(productParams.PageIndex,
+        //    productParams.PageSize, totalItems, data);
 
         return result;
 
@@ -51,7 +51,6 @@ public class ProductManager : IProductManager
         var dbModel = _mapper.Map<Product>(productDTO);
 
         //dbModel.Id = Guid.NewGuid();
-        dbModel.IsDelete = false;
 
         _productRepo.Add(dbModel);
         _productRepo.SaveChanges();
@@ -63,7 +62,7 @@ public class ProductManager : IProductManager
     {
         var dbModel = _productRepo.GetByIdAsync(productDTO.Id);
 
-        if (dbModel is null || dbModel.Result.IsDelete is true)
+        if (dbModel is null)
             return false;
 
         _mapper.Map(productDTO, dbModel);

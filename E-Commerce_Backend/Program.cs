@@ -1,8 +1,10 @@
 using E;
 using E_Commerce_BL;
 using E_Commerce_DAL;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,12 +25,19 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(c =>
     return ConnectionMultiplexer.Connect(configuration);
 });
 
-
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
+
+//builder.Services.AddAuthorization(opt =>
+//{
+//    opt.AddPolicy("Admin",
+//        policy => policy.RequireRole("Admin"));
+//});
 
 builder.Services.AddApplicationServices();
 builder.Services.AddIdentityServices(builder.Configuration);
 builder.Services.AddSwaggerDocumentation();
+
+builder.Services.Configure<WhatsAppSettings>(builder.Configuration.GetSection(nameof(WhatsAppSettings)));
 
 var app = builder.Build();
 
@@ -44,6 +53,7 @@ app.UseStaticFiles();
 app.UseCors("CorsPolicy");
 
 app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.UseSwaggerDocumentation();
@@ -67,8 +77,8 @@ try
 {
     await context.Database.MigrateAsync();
     await identityContext.Database.MigrateAsync();
-    await StoreContextSeed.SeedAsync(context);
-    await AppIdentityDbContextSeed.SeedUsersAsync(userManager);
+    //await StoreContextSeed.SeedAsync(context);
+    //await AppIdentityDbContextSeed.SeedUsersAsync(userManager);
 }
 catch (Exception ex)
 {

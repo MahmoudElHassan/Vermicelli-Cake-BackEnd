@@ -20,9 +20,9 @@ public class AppIdentityDbContextSeed
                     FirstName = "Bob",
                     LastName = "Bobbity",
                     Street = "10 The street",
-                    City = "New York",
-                    State = "NY",
-                    Zipcode = "90210"
+                    Flat = "New York",
+                    Building = "NY"
+                    //Zipcode = "90210"
                 }
             };
 

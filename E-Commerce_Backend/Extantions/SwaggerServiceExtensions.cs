@@ -13,7 +13,7 @@ public static class SwaggerServiceExtensions
             var securitySchema = new OpenApiSecurityScheme
             {
                 Description = "JWT Auth Bearer Scheme",
-                Name = "Authorisation",
+                Name = "Authentication",
                 In = ParameterLocation.Header,
                 Type = SecuritySchemeType.Http,
                 Scheme = "Bearer",

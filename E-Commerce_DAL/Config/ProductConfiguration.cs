@@ -9,12 +9,12 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
     {
         builder.Property(p => p.Id).IsRequired();
         builder.Property(p => p.Name).IsRequired().HasMaxLength(100);
-        builder.Property(p => p.Description).IsRequired();
+        //builder.Property(p => p.Description).IsRequired();
         builder.Property(p => p.Price).HasColumnType("decimal(18,2)");
         builder.Property(p => p.PictureURL).IsRequired();
-        builder.HasOne(p => p.productBrand).WithMany()
-            .HasForeignKey(p => p.ProductBrandId);
-        builder.HasOne(p => p.productType).WithMany()
-            .HasForeignKey(p => p.ProductTypeId);
+        builder.HasOne(p => p.category).WithMany()
+            .HasForeignKey(p => p.CategoryId);
+        //builder.HasOne(p => p.flavor).WithMany()
+        //    .HasForeignKey(p => p.FlavorId);
     }
 }

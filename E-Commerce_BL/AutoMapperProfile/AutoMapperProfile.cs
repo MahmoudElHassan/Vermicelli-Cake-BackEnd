@@ -9,20 +9,20 @@ public class AutoMapperProfile : Profile
     public AutoMapperProfile()
     {
         CreateMap<Product, ReadProductDTO>()
-            .ForMember(x => x.productBrand, z => z.MapFrom(v => v.productBrand.Name))
-            .ForMember(x => x.productType, z => z.MapFrom(v => v.productType.Name))
-            .ForMember(x => x.PictureURL, z => z.MapFrom<ProducrAPIResolver>());
-
+            .ForMember(x => x.Category, z => z.MapFrom(v => v.category.Name))
+            //.ForMember(x => x.Flavor, z => z.MapFrom(v => v.flavor.Name))
+            .ForMember(x => x.PictureURL, z => z.MapFrom<ProductAPIResolver>());
         CreateMap<AddProductDTO, Product>();
         CreateMap<UpdateProductDTO, Product>();
 
-        CreateMap<ProductType, ReadProductTypeDTO>();
-        CreateMap<AddProductTypeDTO, ProductType>();
-        CreateMap<UpdateProductTypeDTO, ProductType>();
+        //CreateMap<Flavor, ReadFlavorDTO>();
+        //CreateMap<AddFlavorDTO, Flavor>();
+        //CreateMap<UpdateFlavorDTO, Flavor>();
 
-        CreateMap<ProductBrand, ReadProductBrandDTO>();
-        CreateMap<AddProductBrandDTO, ProductBrand>();
-        CreateMap<UpdateProductBrandDTO, ProductBrand>();
+        CreateMap<Category, ReadCategoryDTO>()
+            .ForMember(c => c.PictureURL, x => x.MapFrom<CategoryAPIResolver>());
+        CreateMap<AddCategoryDTO, Category>();
+        CreateMap<UpdateCategoryDTO, Category>();
 
         CreateMap<CustomerBasketDto, CustomerBasket>();
         CreateMap<BasketItemDto, BasketItem>();
@@ -32,8 +32,9 @@ public class AutoMapperProfile : Profile
         CreateMap<AddressDto, E_Commerce_DAL.OrderAggregate.Address>();
 
         CreateMap<Order, OrderToReturnDto>()
-    .ForMember(d => d.DeliveryMethod, o => o.MapFrom(s => s.DeliveryMethod.ShortName))
-    .ForMember(d => d.ShippingPrice, o => o.MapFrom(s => s.DeliveryMethod.Price));
+            .ForMember(d => d.DeliveryMethod, o => o.MapFrom(s => s.DeliveryMethod.Area))
+            .ForMember(d => d.ShippingPrice, o => o.MapFrom(s => s.DeliveryMethod.Price));
+
         CreateMap<OrderItem, OrderItemDto>()
             .ForMember(d => d.ProductId, o => o.MapFrom(s => s.ItemOrdered.ProductItemId))
             .ForMember(d => d.ProductName, o => o.MapFrom(s => s.ItemOrdered.ProductName))

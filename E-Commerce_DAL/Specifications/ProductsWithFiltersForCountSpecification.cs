@@ -5,8 +5,7 @@ public class ProductsWithFiltersForCountSpecification : BaseSpecification<Produc
 {
     public ProductsWithFiltersForCountSpecification(ProductSpecParams productParams) : base(x =>
         (string.IsNullOrEmpty(productParams.Search) || x.Name.ToLower().Contains(productParams.Search)) &&
-        (!productParams.BrandId.HasValue || x.ProductBrandId == productParams.BrandId) &&
-        (!productParams.TypeId.HasValue || x.ProductTypeId == productParams.TypeId))
+        (!productParams.CategoryId.HasValue || x.CategoryId == productParams.CategoryId))
     {
 
     }

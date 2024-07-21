@@ -22,6 +22,28 @@ namespace E_Commerce_DAL.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("E_Commerce_DAL.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("PictureURL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+                });
+
             modelBuilder.Entity("E_Commerce_DAL.DeliveryMethod", b =>
                 {
                     b.Property<int>("Id")
@@ -30,24 +52,18 @@ namespace E_Commerce_DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Area")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("DeliveryTime")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("ShortName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
-                    b.ToTable("DeliveryMethods", (string)null);
+                    b.ToTable("DeliveryMethods");
                 });
 
             modelBuilder.Entity("E_Commerce_DAL.Order", b =>
@@ -64,14 +80,8 @@ namespace E_Commerce_DAL.Migrations
                     b.Property<int?>("DeliveryMethodId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("PaymentIntentId")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -84,7 +94,7 @@ namespace E_Commerce_DAL.Migrations
 
                     b.HasIndex("DeliveryMethodId");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("E_Commerce_DAL.OrderItem", b =>
@@ -94,9 +104,6 @@ namespace E_Commerce_DAL.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
 
                     b.Property<int?>("OrderId")
                         .HasColumnType("int");
@@ -111,7 +118,7 @@ namespace E_Commerce_DAL.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrderItems", (string)null);
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("E_Commerce_DAL.Product", b =>
@@ -122,13 +129,8 @@ namespace E_Commerce_DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -142,61 +144,11 @@ namespace E_Commerce_DAL.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("ProductBrandId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductTypeId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductBrandId");
+                    b.HasIndex("CategoryId");
 
-                    b.HasIndex("ProductTypeId");
-
-                    b.ToTable("Products", (string)null);
-                });
-
-            modelBuilder.Entity("E_Commerce_DAL.ProductBrand", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ProductBrands", (string)null);
-                });
-
-            modelBuilder.Entity("E_Commerce_DAL.ProductType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ProductTypes", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("E_Commerce_DAL.Order", b =>
@@ -205,32 +157,35 @@ namespace E_Commerce_DAL.Migrations
                         .WithMany()
                         .HasForeignKey("DeliveryMethodId");
 
-                    b.OwnsOne("E_Commerce_DAL.Order.ShipToAddress#E_Commerce_DAL.OrderAggregate.Address", "ShipToAddress", b1 =>
+                    b.OwnsOne("E_Commerce_DAL.OrderAggregate.Address", "ShipToAddress", b1 =>
                         {
                             b1.Property<int>("OrderId")
                                 .HasColumnType("int");
 
-                            b1.Property<string>("City")
+                            b1.Property<string>("Building")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Comment")
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("FirstName")
                                 .HasColumnType("nvarchar(max)");
 
+                            b1.Property<string>("Flat")
+                                .HasColumnType("nvarchar(max)");
+
                             b1.Property<string>("LastName")
                                 .HasColumnType("nvarchar(max)");
 
-                            b1.Property<string>("State")
-                                .HasColumnType("nvarchar(max)");
+                            b1.Property<int>("PhoneNumber")
+                                .HasColumnType("int");
 
                             b1.Property<string>("Street")
                                 .HasColumnType("nvarchar(max)");
 
-                            b1.Property<string>("ZipCode")
-                                .HasColumnType("nvarchar(max)");
-
                             b1.HasKey("OrderId");
 
-                            b1.ToTable("Orders", (string)null);
+                            b1.ToTable("Orders");
 
                             b1.WithOwner()
                                 .HasForeignKey("OrderId");
@@ -249,7 +204,7 @@ namespace E_Commerce_DAL.Migrations
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.OwnsOne("E_Commerce_DAL.OrderItem.ItemOrdered#E_Commerce_DAL.ProductItemOrdered", "ItemOrdered", b1 =>
+                    b.OwnsOne("E_Commerce_DAL.ProductItemOrdered", "ItemOrdered", b1 =>
                         {
                             b1.Property<int>("OrderItemId")
                                 .HasColumnType("int");
@@ -265,7 +220,7 @@ namespace E_Commerce_DAL.Migrations
 
                             b1.HasKey("OrderItemId");
 
-                            b1.ToTable("OrderItems", (string)null);
+                            b1.ToTable("OrderItems");
 
                             b1.WithOwner()
                                 .HasForeignKey("OrderItemId");
@@ -276,21 +231,13 @@ namespace E_Commerce_DAL.Migrations
 
             modelBuilder.Entity("E_Commerce_DAL.Product", b =>
                 {
-                    b.HasOne("E_Commerce_DAL.ProductBrand", "productBrand")
+                    b.HasOne("E_Commerce_DAL.Category", "category")
                         .WithMany()
-                        .HasForeignKey("ProductBrandId")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("E_Commerce_DAL.ProductType", "productType")
-                        .WithMany()
-                        .HasForeignKey("ProductTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("productBrand");
-
-                    b.Navigation("productType");
+                    b.Navigation("category");
                 });
 
             modelBuilder.Entity("E_Commerce_DAL.Order", b =>

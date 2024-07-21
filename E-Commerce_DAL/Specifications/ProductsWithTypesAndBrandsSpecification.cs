@@ -5,16 +5,16 @@ public class ProductsWithTypesAndBrandsSpecification : BaseSpecification<Product
     public ProductsWithTypesAndBrandsSpecification(ProductSpecParams productParams)
         : base(x =>
             (string.IsNullOrEmpty(productParams.Search) || x.Name.ToLower().Contains(productParams.Search)) &&
-            (!productParams.BrandId.HasValue || x.ProductBrandId == productParams.BrandId) &&
-            (!productParams.TypeId.HasValue || x.ProductTypeId == productParams.TypeId)
+            (!productParams.CategoryId.HasValue || x.CategoryId == productParams.CategoryId)
+            //(!productParams.FlavorId.HasValue || x.FlavorId == productParams.FlavorId)
             )
     {
-        AddInclude(x => x.productType);
-        AddInclude(x => x.productBrand);
+        AddInclude(x => x.category);
+        //AddInclude(x => x.flavor);
         //AddInclude(x=>x.IsDelete == false);
         AddOrderBy(x => x.Name);
-        ApplyPaging(productParams.PageSize * (productParams.PageIndex - 1),
-            productParams.PageSize);
+        //ApplyPaging(productParams.PageSize * (productParams.PageIndex - 1),
+        //    productParams.PageSize);
 
         if (!string.IsNullOrEmpty(productParams.Sort))
         {
@@ -36,8 +36,8 @@ public class ProductsWithTypesAndBrandsSpecification : BaseSpecification<Product
 
     public ProductsWithTypesAndBrandsSpecification(int id) : base(x => x.Id == id)
     {
-        AddInclude(x => x.productType);
-        AddInclude(x => x.productBrand);
+        AddInclude(x => x.category);
+        //AddInclude(x => x.flavor);
         //AddInclude(x => x.IsDelete == false);
     }
 }

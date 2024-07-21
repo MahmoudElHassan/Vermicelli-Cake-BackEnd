@@ -5,7 +5,7 @@ namespace E_Commerce_BL;
 
 public interface IProductManager
 {
-    Task<Pagination<ReadProductDTO>> GetAll([FromQuery] ProductSpecParams productParams);    
+    Task<IReadOnlyList<ReadProductDTO>> GetAll([FromQuery] ProductSpecParams productParams);    
     Task<ReadProductDTO> GetById(int id);
     ReadProductDTO Add(AddProductDTO productDTO);
     bool Update(UpdateProductDTO productDTO);

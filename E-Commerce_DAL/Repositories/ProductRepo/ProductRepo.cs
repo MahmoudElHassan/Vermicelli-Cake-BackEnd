@@ -20,18 +20,16 @@ public class ProductRepo : GenericRepo<Product>, IProductRepo
     public async Task<IReadOnlyList<Product>> GetAllEagerLoad()
     {
         return await _context.Products
-            .Include(p=>p.productBrand)
-            .Include(p=>p.productType)
-            .Where(d => d.IsDelete == false)
+            .Include(p=>p.category)
+            //.Include(p=>p.flavor)
             .ToListAsync();
     }
 
     public async Task<Product> GetByIdEagerLoad(int id)
     {
         return await _context.Products
-            .Include(p => p.productBrand)
-            .Include(p => p.productType)
-            .Where(d=>d.IsDelete == false)
+            .Include(p => p.category)
+            //.Include(p => p.flavor)
             .FirstOrDefaultAsync(i => i.Id == id);
     }
     #endregion

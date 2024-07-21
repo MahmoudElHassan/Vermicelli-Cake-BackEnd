@@ -1,14 +1,14 @@
 namespace E_Commerce_DAL.Identity;
 
-public class Address
+public class Address : BaseEntity
 {
-    public int Id { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
+    public string PhoneNumber { get; set; }
+    public string Flat { get; set; }
+    public string Building { get; set; }
     public string Street { get; set; }
-    public string City { get; set; }
-    public string State { get; set; }
-    public string Zipcode { get; set; }
+    public string Comment { get; set; }
     public string AppUserId { get; set; }
     public AppUser AppUser { get; set; }
 }

@@ -73,7 +73,7 @@ public class AccountController : BaseApiController
         if (CheckEmailExistsAsync(registerDto.Email).Result.Value)
         {
             return new BadRequestObjectResult(new ApiValidationErrorResponse
-            { Errors = new[] { "Email address is in use" } });
+            { Errors = new[] { "Email address is used" } });
         }
 
         var user = new AppUser
@@ -87,13 +87,17 @@ public class AccountController : BaseApiController
 
         if (!result.Succeeded) return BadRequest(new ApiResponse(400));
 
+        await _userManager.AddToRoleAsync(user, "User");
+
         return new UserDto
         {
             DisplayName = user.DisplayName,
             Token = _tokenService.CreateToken(user),
             Email = user.Email
         };
+
     }
+
 
     [HttpGet("emailexists")]
     public async Task<ActionResult<bool>> CheckEmailExistsAsync([FromQuery] string email)

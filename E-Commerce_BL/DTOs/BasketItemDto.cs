@@ -22,8 +22,8 @@ public class BasketItemDto
     public string PictureUrl { get; set; }
 
     [Required]
-    public string Brand { get; set; }
+    public string Category { get; set; }
 
-    [Required]
-    public string Type { get; set; }
+    //[Required]
+    //public string Flavor { get; set; }
 }

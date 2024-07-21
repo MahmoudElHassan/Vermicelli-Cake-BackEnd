@@ -12,18 +12,18 @@ public static class ApplicationServicesExtensions
         #region Reposatories
         services.AddScoped(typeof(IGenericRepo<>), typeof(GenericRepo<>));
         services.AddScoped<IProductRepo, ProductRepo>();
-        services.AddScoped<IProductBrandRepo, ProductBrandRepo>();
-        services.AddScoped<IProductTypeRepo, ProductTypeRepo>();
+        services.AddScoped<ICategoryRepo, CategoryRepo>();
+        //services.AddScoped<IFlavorRepo, FlavorRepo>();
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         #endregion
 
         #region Managers
         services.AddScoped<IProductManager, ProductManager>();
-        services.AddScoped<IProductBrandManager, ProductBrandManager>();
-        services.AddScoped<IProductTypeManager, ProductTypeManager>();
-        services.AddScoped<IBasketManager, BasketManager>();
-        services.AddScoped<IOrderManager, OrderManager>();
+        services.AddScoped<ICategoryManager, CategoryManager>();
+        //services.AddScoped<IFlavorManager, FlavorManager>();
+        services.AddScoped<IBasketService, BasketService>();
+        services.AddScoped<IOrderService, OrderService>();
         #endregion
 
         services.Configure<ApiBehaviorOptions>(options =>
@@ -51,8 +51,6 @@ public static class ApplicationServicesExtensions
                 });
             });
         #endregion
-
-
 
         return services;
     }

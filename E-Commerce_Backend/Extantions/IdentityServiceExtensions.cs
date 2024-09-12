@@ -17,13 +17,10 @@ public static class IdentityServiceExtensions
 
 
         builder = new IdentityBuilder(builder.UserType, builder.Services);
-        builder.AddRoles<IdentityRole>();
+        //builder.AddRoles<IdentityRole>();
         builder.AddEntityFrameworkStores<AppIdentityDbContext>();
         builder.AddSignInManager<SignInManager<AppUser>>();
-        builder.AddDefaultTokenProviders();
-
-
-
+        //builder.AddDefaultTokenProviders();
 
 
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

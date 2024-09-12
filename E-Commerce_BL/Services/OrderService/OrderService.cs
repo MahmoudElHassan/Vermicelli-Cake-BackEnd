@@ -1,5 +1,8 @@
 using E_Commerce_DAL;
 using E_Commerce_DAL.OrderAggregate;
+using Microsoft.Extensions.Options;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
 
 namespace E_Commerce_BL;
 
@@ -7,10 +10,13 @@ public class OrderService : IOrderService
 {
     private readonly IBasketService _basketManager;
     private readonly IUnitOfWork _unitOfWork;
+    //private readonly WhatsAppSettings _settings;
+
     public OrderService(IBasketService basketRepo, IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
         _basketManager = basketRepo;
+        //_settings = settings.Value;
     }
 
     public async Task<Order> CreateOrderAsync(string buyerEmail, int deliveryMethodId, string basketId, Address shippingAddress)
@@ -40,7 +46,7 @@ public class OrderService : IOrderService
 
         // create order
         var order = new Order(items, buyerEmail, shippingAddress, deliveryMethod,
-            subtotal);
+            subtotal, basket.PaymentIntentId);
         _unitOfWork.Repository<Order>().Add(order);
 
         //if (order.BuyerEmail != buyerEmail &&
@@ -88,6 +94,55 @@ public class OrderService : IOrderService
         var spec = new OrdersWithItemsAndOrderingSpecification(buyerEmail);
 
         return await _unitOfWork.Repository<Order>().ListAsync(spec);
+    }
+
+    //public async Task<bool> SendMessage(Order order)
+    //{
+    //    try
+    //    {
+    //        using HttpClient httpClient = new();
+
+    //        httpClient.DefaultRequestHeaders.Authorization =
+    //            new AuthenticationHeaderValue("Bearer", _settings.TokenWhatsApp);
+
+
+    //        WhatsAppRequest body = new()
+    //        {
+    //            template = new Template
+    //            {
+    //                name = "new_order_parms",
+    //                language = new Language { code = "en_US" },
+    //            }
+    //        };
+
+    //        HttpResponseMessage response =
+    //            await httpClient.PostAsJsonAsync(new Uri(_settings.ApiUrlWhatsApp), body);
+
+    //        return response.IsSuccessStatusCode;
+
+    //    }
+    //    catch (Exception ex)
+    //    {
+
+    //        throw new NotImplementedException(ex.Source + " " + ex.StackTrace + " " + ex.Message);
+    //    }
+    //}
+
+    public string GetOrderItems(IList<OrderItem> orderItem)
+    {
+        string result = "";
+
+        foreach (var item in orderItem)
+        {
+            result += item.ItemOrdered.ProductName + " = " + item.Quantity + ", ";
+        }
+
+        //for (int i = 0; i < orderItem.ToArray().Length - 1; i++)
+        //{
+        //    result += orderItem[i].ItemOrdered.ProductName + " = " + orderItem[i].Quantity + ", ";
+        //}
+
+        return result;
     }
 
 }

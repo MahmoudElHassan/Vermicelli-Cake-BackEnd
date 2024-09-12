@@ -79,27 +79,91 @@ public class OrdersController : BaseApiController
     }
 
     [HttpPost("whatsapp-message")]
-    public async Task<IActionResult> WhatsAppTest()
+    public async Task<IActionResult> WhatsAppTest(Order order)
     {
         using HttpClient httpClient = new();
 
+        //OrderItem[] orderItem = order.OrderItems.ToArray();
+
         httpClient.DefaultRequestHeaders.Authorization =
             new AuthenticationHeaderValue("Bearer", _settings.TokenWhatsApp);
+
+        string date = order.OrderDate.ToShortTimeString() + " - " +
+                order.OrderDate.ToShortDateString();
+
+        string name = order.ShipToAddress.FirstName + " " + order.ShipToAddress.LastName;
+
+        string phoneNo = order.ShipToAddress.PhoneNumber;
+
+        string address = order.ShipToAddress.Flat + " - " + order.ShipToAddress.Building + ", " + order.ShipToAddress.Street + ", " + order.DeliveryMethod.Area;
+
+        string comment = order.ShipToAddress.Comment;
+
+        //var orderItems = order.OrderItems;
+        string items = _orderManager.GetOrderItems(order.OrderItems);
+        ////for (int i = 0; i < order.OrderItems.ToArray().Length - 1; i++)
+        ////{
+        ////    items += order.OrderItems[i].ItemOrdered.ProductName + " = " + order.OrderItems[i].Quantity + ", ";
+        ////}
 
         WhatsAppRequest body = new()
         {
             template = new Template
             {
-                name = "new_order",
-                language = new Language { code = "en" }
+                name = "new_order_parms",
+                language = new Language { code = "en_US" },
+                components = new List<Component>
+                {
+                    new Component
+                    {
+                        type = "body",
+                        parameters = new List<object>
+                        {
+                            new { type = "text", text = date },
+                            new { type = "text", text = name },
+                            new { type = "text", text = phoneNo },
+                            new { type = "text", text = address },
+                            new { type = "text", text = comment },
+                            new { type = "text", text = items },
+                            new { type = "text", text = order.Subtotal },
+                        }
+                    }
+                }
+
             }
         };
 
-        HttpResponseMessage response = await
-            httpClient.PostAsJsonAsync(new Uri(_settings.ApiUrlWhatsApp), body);
+        //WhatsAppRequest body = new()
+        //{
+        //    template = new Template
+        //    {
+        //        name = "new_order_parms",
+        //        language = new Language { code = "en_US" },
+        //        components = new List<Component>
+        //        {
+        //            new Component
+        //            {
+        //                type = "body",
+        //                parameters = new List<object>
+        //                {
+        //                    new { type = "text", text = order.ShipToAddress.FirstName + " " + order.ShipToAddress.LastName },
+        //                    new { type = "text", text = order.ShipToAddress.PhoneNumber },
+        //                    new { type = "text", text = order.ShipToAddress.Flat + ", " + order.ShipToAddress.Building + ", " + order.ShipToAddress.Street + ", " + order.DeliveryMethod.Area },
+        //                    new { type = "text", text = order.ShipToAddress.Comment },
+        //                    new { type = "text", text = "items" },
+        //                    new { type = "text", text = order.Subtotal },
+        //                    new { type = "text", text = "date" },
+        //                }
+        //            }
+        //        }
+        //    }
+        //};
 
-        if (!response.IsSuccessStatusCode)
-            throw new Exception("Something went wrong!!");
+        HttpResponseMessage response =
+            await httpClient.PostAsJsonAsync(new Uri(_settings.ApiUrlWhatsApp), body);
+
+        //if (!response.IsSuccessStatusCode)
+        //    throw new Exception("Something went wrong!!");
 
         return Ok(response);
     }
